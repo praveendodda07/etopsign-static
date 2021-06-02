@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"
+        integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
+        integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
+        crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+        integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA=="
+        crossorigin="anonymous" />
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"
+        integrity="sha512-uto9mlQzrs59VwILcLiRYeLKPPbS/bT71da/OEBYEwcdNUk8jYIy+D176RYoop1Da+f9mvkYrmj5MCLZWEtQuA=="
+        crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css"
+        integrity="sha512-aOG0c6nPNzGk+5zjwyJaoRUgCdOrfSDhmMID2u4+OIslr0GjpLKo7Xm0Ao3xmpM4T8AmIouRkqwj1nrdVsLKEQ=="
+        crossorigin="anonymous" />
+
+    <style>
+        /* width */
+        ::-webkit-scrollbar {
+            width: 2px;
+            height: 2px;
+        }
+
+        /* Track */
+        ::-webkit-scrollbar-track {
+            box-shadow: inset 0 0 5px lightgray;
+            border-radius: 10px;
+        }
+
+        /* Handle */
+        ::-webkit-scrollbar-thumb {
+            background: #3060D8;
+            border-radius: 5px;
+        }
+
+        /* Handle on hover */
+        ::-webkit-scrollbar-thumb:hover {
+            background: #b30000;
+        }
+
+
+
+        body {
+            background-color: #3060D8;
+        }
+
+        .panel {
+            background-color: #F1F5F8;
+            padding: 25px;
+            border-radius: 25px;
+        }
+
+
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            position: relative;
+            margin: 10px 0px;
+        }
+
+        a {
+            display: block;
+            padding: 10px 15px;
+            color: white;
+            position: relative;
+        }
+
+
+        .active::after {
+            content: '';
+            width: 25px;
+            height: 25px;
+            background-color: #3060D8;
+            position: absolute;
+            right: 0;
+            top: -25px;
+            border-radius: 50%;
+            z-index: 6;
+        }
+
+        .active::before {
+            content: '';
+            width: 25px;
+            height: 25px;
+            background-color: #3060D8;
+            position: absolute;
+            right: 0;
+            bottom: -25px;
+            border-radius: 15px;
+            z-index: 10;
+        }
+
+        .active a::after {
+            content: '';
+            width: 10px;
+            height: 10px;
+            background-color: #F1F5F8;
+            position: absolute;
+            right: 0;
+            top: -10px;
+        }
+
+        .active a::before {
+            content: '';
+            width: 10px;
+            height: 10px;
+            background-color: #F1F5F8;
+            position: absolute;
+            right: 0;
+            bottom: -10px;
+            z-index: 5;
+        }
+
+        a:hover {
+            text-decoration: none;
+            color: black;
+        }
+
+        .active a {
+            background-color: #F1F5F8;
+            color: black;
+            border-radius: 25px 0px 0px 25px;
+        }
+
+        .logo {
+            text-align: center;
+            font-size: 24px;
+            color: white;
+        }
+
+        .panel {
+            width: 1000px;
+        }
+
+        .black {
+            color: #2D3748;
+        }
+
+
+        /* TOOLS */
+        .tools-section {
+            overflow: hidden;
+            height: 100%;
+        }
+
+        .widgets,
+        .document-body,
+        .configs {
+            float: left;
+            height: 70vh;
+        }
+
+        .widgets {
+            width: 180px;
+
+        }
+
+        .widget-item {
+            border: 1px solid;
+            margin: 20px;
+            padding: 4px 10px;
+            cursor: pointer;
+            border-radius: 7px;
+        }
+
+        .widget-item:hover {
+            background-color: rgba(152, 152, 152, .6);
+        }
+
+        .document-body {
+            width: 730px;
+            margin: 0px 25px;
+            overflow: auto;
+        }
+
+        .document {
+            margin: 15px auto;
+        }
+
+        .configs {
+            width: 230px;
+            padding: 15px;
+            overflow: auto;
+        }
+
+
+        /* WIDGETS */
+        .text-widget,
+        .name-widget,
+        .email-widget,
+        .dateTime-widget {
+            width: 150px;
+            height: 23px;
+            line-height: 16px;
+            font-size: 14px;
+            font-family: monospace;
+            background-color: rgba(0, 174, 255, .5);
+            position: absolute;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            cursor: pointer;
+            padding: 4px;
+            display: inline;
+        }
+
+        .name-widget,
+        .email-widget,
+        .dateTime-widget {
+            width: auto;
+        }
+
+        .stamp-widget,
+        .signature-widget,
+        .initial-widget {
+            width: 75px;
+            height: 75px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(0, 174, 255, .5);
+            position: absolute;
+            overflow: hidden;
+            cursor: pointer;
+            padding: 4px;
+            flex-direction: column;
+        }
+
+
+        textarea {
+            resize: none;
+        }
+
+        .config {
+            display: none;
+        }
+
+        canvas {
+            pointer-events: none;
+            position: relative;
+        }
+
+        .document {
+            position: relative;
+        }
+
+        .handler {
+            display: none;
+        }
+
+        .access-code-box {
+            display: none;
+        }
+
+        .test {
+            border: 1px solid red;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class=" p-4 ">
+        <div class="row m-0">
+            <div class="nav-bar p-0 m-0 h-100 ">
+                <div class="logo"><b>etopSign</b></div>
+                <ul>
+                    <li> <a href=""><i class="fas fa-inbox"></i> Home</a> </li>
+                    <li class="active"><a href=""> <i class="fas fa-inbox"></i> Create Document</a> </li>
+                    <li><a href=""> <i class="fas fa-th-large"></i> Dashboard</a> </li>
+                    <li><a href=""> <i class="fas fa-chart-line"></i> Reports</a> </li>
+                    <li><a href=""><i class="fas fa-cog"></i> Settings</a> </li>
+                </ul>
+            </div>
+            <div class="h-100 panel " style="min-height: 550px;">
+                <div class="step1">
+                    <h5 class="black">Document upload</h5>
+                    <div class="container shadow mt-5 d-flex align-items-center justify-content-center"
+                        style="height: 250px;background-color: white;border-radius: 10px;">
+                        <input type="file" id="photo" accept="application/pdf" class="d-none"
+                            onchange="uploadDocument()">
+
+                        <div class="loader" style="display: none;">
+                            <div class="spinner-border text-primary" style="width: 150px;height: 150px;" role="status">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                        </div>
+
+                        <canvas id="preview-canvas" class="preview-file border"
+                            style="width: 150px; height: 200px;display: none;">
+
+                        </canvas>
+                        <div class="add-file">
+                            <label for="photo" style="font-size: 100px;cursor: pointer;"> <i class="fas fa-plus"></i>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="text-right mt-4">
+                        <button class="btn btn-primary step1-btn" onclick="gotoStep2()"
+                            style="display: none;">Next</button>
+                    </div>
+                </div>
+
+                <div class="step2" style="display: none;">
+                    <h5 class="black mb-3">Add recepients</h5>
+
+                    <input type="checkbox" name="isOrder" id="isOrder" onchange="changeIsOrdreStatus()"> <label
+                        style="cursor: pointer;" for="isOrder">Set
+                        Order</label>
+
+                    <div class="recepients" id="recepient-list-for-drag">
+                        <div class="recepient border p-3 my-3" style="border-radius:10px">
+                            <div class="d-flex">
+                                <div class="handler">
+                                    <div class="handle d-inline-block" style="cursor:grabbing;"> <i
+                                            class="fas fa-bars"></i>
+                                    </div>
+                                </div>
+                                <button class="btn btn-danger px-2 py-0 ml-auto" onclick="removeRecepient(this)"> <i
+                                        class="fas fa-times"></i> </button>
+                            </div>
+                            <div class="row m-0">
+                                <div class="form-group col-md-4">
+                                    <label>Name</label>
+                                    <input type="text" name="name" class="form-control ">
+                                    <div class="invalid-feedback">Inavalid name</div>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label>Signin Type</label>
+                                    <select name="signType" id="" class="form-control" onchange="checkSignType(this)">
+                                        <option value="sign">Need to Sign</option>
+                                        <option value="cc">Receives CC</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row m-0">
+                                <div class="form-group col-md-4">
+                                    <label>Email</label>
+                                    <input type="email" name="email" class="form-control">
+                                    <div class="invalid-feedback">Inavalid Email</div>
+                                </div>
+                                <div class="form-group col-md-4 isAccess-code-box">
+                                    <label>Access Code</label>
+                                    <select name="isAccessCode" id="" class="form-control"
+                                        onchange="checkIsAccessCode(this)">
+                                        <option value="false">None</option>
+                                        <option value="true">Access Code</option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-4 access-code-box">
+                                    <label>Code</label>
+                                    <input type="number" name="accessCode" class="form-control ">
+                                    <div class="invalid-feedback">Enter six digit access code</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <button class="btn btn-success my-3" onclick="addRecepient()"><i
+                                class="fas fa-plus"></i></button> <br>
+                        <button class="btn btn-primary my-3" onclick="verifyRecepients()">Next</button>
+                    </div>
+                </div>
+
+                <div class="step3" style="display: none;">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <select name="recepients-names" onchange="showThisrecp(this.value)" class="form-control">
+                            </select>
+                        </div>
+                        <div>
+                            <button class="btn btn-primary" onclick="gotoStep4()">Next</button>
+                        </div>
+                    </div>
+                    <hr>
+
+                    <div class="tools-section">
+                        <div class="widgets shadow">
+                            <div class="widget-item" id="text" draggable="true" ondragstart="drag(event)"><i
+                                    class="fab recep-color fa-tumblr"></i>
+                                Text </div>
+
+                            <div class="widget-item" id="name" draggable="true" ondragstart="drag(event)"><i
+                                    class="fas fa-user-alt"></i>
+                                Name </div>
+
+                            <div class="widget-item" id="email" draggable="true" ondragstart="drag(event)"><i
+                                    class="fas fa-envelope"></i>
+                                Email </div>
+
+                            <div class="widget-item" id="dateTime" draggable="true" ondragstart="drag(event)"><i
+                                    class="fas fa-calendar-alt"></i>
+                                Date time </div>
+
+                            <div class="widget-item" id="signature" draggable="true" ondragstart="drag(event)"><i
+                                    class="fas fa-signature"></i>
+                                Signature </div>
+
+                            <div class="widget-item" id="initial" draggable="true" ondragstart="drag(event)"><i
+                                    class="fab fa-draft2digital"></i>
+                                Initial </div>
+
+                            <div class="widget-item" id="stamp" draggable="true" ondragstart="drag(event)"><i
+                                    class="fas fa-stamp"></i>
+                                STAMP </div>
+                        </div>
+                        <div class="document-body shadow"></div>
+                        <div class="configs shadow">
+                            <div class="config">
+                                <b>Configuration</b>
+                                <hr>
+                                <div class="form-group t-e-n">
+                                    <label>Font Style:</label>
+                                    <select class="form-control font-style" onchange="changeFontFamily()">
+                                        <option>Roboto</option>
+                                        <option>monospace</option>
+                                    </select>
+                                    <hr>
+                                </div>
+
+                                <div class="form-group t-e-n">
+                                    <label>Font Size:</label>
+                                    <select class="form-control font-size" onchange="changeFontSize()">
+                                        <option>10px</option>
+                                        <option>12px</option>
+                                        <option>14px</option>
+                                        <option>16px</option>
+                                        <option>18px</option>
+                                    </select>
+                                    <hr>
+                                </div>
+
+                                <div class="form-group text-config-only">
+                                    <div>
+                                        <input type="checkbox" class="isRequireCheck" id="isRequireCheck"
+                                            onchange="changeIsRequire()"> <label for="isRequireCheck">Required
+                                            Field</label>
+                                    </div>
+                                    <div>
+                                        <input type="checkbox" class="isDisableCheck" id="isDisableCheck"
+                                            onchange="changeIsDisable()"> <label for="isDisableCheck">Disable
+                                            Field</label>
+                                    </div>
+                                    <hr>
+                                </div>
+
+                                <div class="form-group text-config-only">
+                                    <label>Validation:</label>
+                                    <select class="form-control input-type" onchange="changeInputType()">
+                                        <option value="text">text</option>
+                                        <option value="email">email</option>
+                                        <option value="number">number only</option>
+                                    </select>
+                                    <hr>
+                                </div>
+
+                                <div class="form-group text-config-only">
+                                    <label>Text:</label>
+                                    <textarea class="form-control input-text" onkeyup="changeText()"></textarea>
+                                    <hr>
+                                </div>
+
+                                <div class="form-group">
+                                    <button class="btn btn-danger d-block w-100"
+                                        onclick="removeWidget()">Remove</button>
+                                    <hr>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step4" style="display: none;">
+                    <h5 class="black">Add Email Content</h5>
+
+                    <div class="form-group mt-4">
+                        <label>Email Subject</label>
+                        <input name="email-subject" type="text" class="form-control" value="Please sign your document">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Email Message</label>
+                        <textarea name="email-message" id="" rows="7" class="form-control"></textarea>
+                    </div>
+
+                    <div class="text-right">
+                        <button class="btn btn-danger" onclick="cancelDocument()">Cancel</button>
+                        <button class="btn btn-success" id="sendBtn" onclick="sendDocument()">Send</button>
+                    </div>
+                </div>
+
+                <div class="step5" style="height: 350px;display: none;">
+                    <div class="d-flex flex-column h-100 align-items-center justify-content-center">
+                        <h3 class="text-success">Your document has been sent successfully</h3>
+                        <a href="./" class="btn btn-success">Home</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalWidget" data-backdrop="static" data-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalTitle"></h5>
+                </div>
+                <div class="modal-body" id="modalBody"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" id="isDismiss">Close</button>
+                    <span id="funBtn">
+
+                    </span>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</body>
+
+<script src="//mozilla.github.io/pdf.js/build/pdf.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.10.2/Sortable.min.js"
+    integrity="sha512-ELgdXEUQM5x+vB2mycmnSCsiDZWQYXKwlzh9+p+Hff4f5LA+uf0w2pOp3j7UAuSAajxfEzmYZNOOLQuiotrt9Q=="
+    crossorigin="anonymous"></script>
+
+<script src="https://www.gstatic.com/firebasejs/8.3.2/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.3.2/firebase-storage.js"></script>
+
+<script src="./js/firebaseConfig.js"></script>
+
+<script src="./js/modal.js"></script>
+<script src="./js/loaderSpinner.js"></script>
+
+<script src="./js/data.js"></script>
+<script src="./js/routes.js"></script>
+<script src="./js/step-1.js"></script>
+<script src="./js/step-2.js"></script>
+<script src="./js/step-3.js"></script>
+
+<script>
+    // let url = new URL(location.href);
+    // let searchParams = new URLSearchParams(url.search);
+    // console.log(searchParams.get('a'));
+
+
+    function cancelDocument() {
+        let modalTitle = 'Delete Document';
+        let modalBody = 'Are you sure want to cancel document?';
+        let funBtn = '<a href="./" class="btn btn-danger">Yes</a>';
+        loadModal(modalTitle, modalBody, true, funBtn);
+    }
+
+    function sendDocument() {
+        // loadedSpinner('sendBtn', 'sending', true);
+
+
+        let documentData = getAllData();
+
+
+        let modalTitle = 'Request Data';
+        let modalBody = "<pre>" + JSON.stringify(documentData, null, 2) + "</pre>";
+
+
+        loadModal(modalTitle, modalBody, true, '');
+
+        // $.ajax({
+        //     type: 'POST',
+        //     // url: 'http://localhost:5001/etop-sign-655ae/us-central1/app/document/',
+        //     // url: 'https://us-central1-etop-sign-655ae.cloudfunctions.net/app/document/create',
+        //     data: {
+        //         documentData: documentData,
+        //     },
+        //     complete: function (r) {
+        //         console.log(r.responseText);
+        //         gotoStep5();
+        //     }
+        // })
+
+    }
+
+    function getAllData() {
+
+        var documentData123 = {
+            "completedLevel": 3,
+            "isOrder": false,
+            "recepients": [
+                {
+                    "recp-details": {
+                        "name": "sdjk",
+                        "email": "test@tds.com",
+                        "signType": "cc",
+                        "isAccessCode": false,
+                        "accessCode": ""
+                    },
+                    "tools": []
+                },
+                {
+                    "recp-details": {
+                        "name": "pravee",
+                        "email": "ks@klsc.com",
+                        "signType": "sign",
+                        "isAccessCode": false,
+                        "accessCode": ""
+                    },
+                    "tools": [
+                        {
+                            "page": 1,
+                            "toolID": "TEXT-TOOL",
+                            "x-axis": "92px",
+                            "y-axis": "112px",
+                            "width": "150px",
+                            "height": "23px",
+                            "name": "tool101",
+                            "settings": {
+                                "isRequired": true,
+                                "font-style": "monospace",
+                                "font-size": "14px",
+                                "text": "",
+                                "isDisabled": false,
+                                "type": "text"
+                            }
+                        },
+                        {
+                            "page": 1,
+                            "toolID": "NAME-TOOL",
+                            "x-axis": "291px",
+                            "y-axis": "263px",
+                            "width": "58.5781px",
+                            "height": "23px",
+                            "name": "tool102",
+                            "settings": {
+                                "font-style": "monospace",
+                                "font-size": "14px",
+                                "text": "pravee"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "recp-details": {
+                        "name": "pafas",
+                        "email": "adsjk@js.com",
+                        "signType": "sign",
+                        "isAccessCode": true,
+                        "accessCode": "123456"
+                    },
+                    "tools": [
+                        {
+                            "page": 1,
+                            "toolID": "TEXT-TOOL",
+                            "x-axis": "92px",
+                            "y-axis": "112px",
+                            "width": "150px",
+                            "height": "23px",
+                            "name": "tool101",
+                            "settings": {
+                                "isRequired": true,
+                                "font-style": "monospace",
+                                "font-size": "14px",
+                                "text": "",
+                                "isDisabled": false,
+                                "type": "text"
+                            }
+                        },
+                        {
+                            "page": 1,
+                            "toolID": "NAME-TOOL",
+                            "x-axis": "291px",
+                            "y-axis": "263px",
+                            "width": "58.5781px",
+                            "height": "23px",
+                            "name": "tool102",
+                            "settings": {
+                                "font-style": "monospace",
+                                "font-size": "14px",
+                                "text": "pravee"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "email-config": {
+                "subject": 'Please sign your document',
+                "message": 'Thankyou for signing',
+            }
+        };
+
+
+        let pages = $('.document').toArray();
+        const totalRecepients = recepients.length;
+        const totalPages = pages.length;
+
+        let toolCount = 101;
+
+        documentData = {
+            "document": fileURL,
+            "isOrder": isOrder,
+            "recepients": [],
+            "email-config": {
+                "subject": $('[name="email-subject"]').val().trim() == '' ? 'Please sign your document' : $('[name="email-subject"]').val().trim(),
+                "message": $('[name="email-message"]').val(),
+            }
+        };
+
+        recepients.forEach((recepient, rec_index) => {
+            let tools = [];
+
+            pages.forEach((page, pag_index) => {
+                let pageWidgets = $(page).find(`[data-recpient="${rec_index}"]`);
+
+                for (let k = 0; k < pageWidgets.length; k++) {
+                    let widget = $(pageWidgets[k]);
+
+                    let tool = {
+                        "page": pag_index + 1,
+                        "toolID": widget.data('widget'),
+                        "x-axis": widget.css('left'),
+                        "y-axis": widget.css('top'),
+                        "width": widget.css('width'),
+                        "height": widget.css('height'),
+                        "name": `tool${toolCount++}`
+                    };
+                    // RADIO-TOOL
+                    switch (widget.data('widget')) {
+                        case 'TEXT-TOOL':
+                            tool['settings'] = {
+                                "isRequired": widget.data('isrequired'),
+                                "font-style": widget.css('font-family'),
+                                "font-size": widget.css('font-size'),
+                                "text": widget.text(),
+                                "isDisabled": widget.data('isdisabled'),
+                                "type": widget.data('type')
+                            }
+                            break;
+
+                        case 'NAME-TOOL':
+                        case 'EMAIL-TOOL':
+                            tool['settings'] = {
+                                "font-style": widget.css('font-family'),
+                                "font-size": widget.css('font-size'),
+                                "text": widget.text()
+                            }
+                            break;
+
+                        case 'DATETIME-TOOL':
+                            tool['settings'] = {
+                                "font-style": widget.css('font-family'),
+                                "font-size": widget.css('font-size'),
+                                "text": ""
+                            }
+                            break;
+
+                        case 'SIGNATURE-TOOL':
+                            tool['settings'] = {
+                                "font-style": "",
+                                "text": ""
+                            }
+                            break;
+
+                        case 'INITIAL-TOOL':
+                            tool['settings'] = {
+                                "font-style": "",
+                                "text": ""
+                            }
+                            break;
+
+                        case 'STAMP-TOOL':
+                            tool['settings'] = {
+                                "src": ""
+                            }
+                            break;
+                    }
+
+                    tools.push(tool);
+                }
+
+
+            });
+
+            documentData.recepients.push({
+                "recp-details": recepient,
+                "tools": tools,
+            });
+        });
+
+
+        return documentData;
+        // let modalTitle = 'Sending to API';
+        // let modalBody = `<pre> ${JSON.stringify(documentData, undefined, 2)} </pre>`;
+        // loadModal(modalTitle, modalBody, true, '');
+    }
+
+
+</script>
+
+</html>
